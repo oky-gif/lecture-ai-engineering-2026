@@ -31,8 +31,10 @@ def _names(entry: dict) -> list[str]:
 def search_glossary(query: str) -> str:
     """講座の用語集から用語を検索し、定義と、どの回で扱うかを返す。
 
-    AIエンジニアリングの用語や、この講座（AIE2026）に固有の言葉について
-    答える前に使うこと。query には調べたい用語を1つだけ入れる（例: "LoRA"）。
+   一般的なAI用語については、モデル自身の知識で回答できる場合、
+このツールを使用する必要はない。
+講座（AIE2026）固有の情報を確認する場合に使用すること。
+query には調べたい用語を1つだけ入れる（例: "LoRA"）。
     """
     q = _normalize(query)
     if not q:
@@ -77,3 +79,14 @@ def get_lecture_summary(lecture: int) -> str:
         available = sorted(p.stem for p in (DATA_DIR / "lectures").glob("*.md"))
         return f"第{lecture}回の要点はまだありません。用意されている回: {', '.join(available)}"
     return path.read_text(encoding="utf-8")
+def make_quiz(topic: str) -> str:
+    """指定されたAI関連のテーマについて、理解度を確認するためのクイズを作成する。
+
+    ユーザーが特定のテーマについてクイズや練習問題を求めたときに使う。
+    topic にはクイズのテーマを指定する（例: "LoRA"）。
+    """
+    return (
+        f"テーマ「{topic}」について、"
+        "4択の理解度確認クイズを1問作成してください。"
+        "正解と簡単な解説も付けてください。"
+    )
